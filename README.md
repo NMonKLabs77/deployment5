@@ -67,17 +67,14 @@ Use Terraform to create:
    - Connect Github to pipeline(Username, PAT(Personal Access Token), Repository HTTP URL)
    - The JenkinsfileV1 runs the app setup.sh on the server
 
+9.
+
 ## Optimization
 
 To optimize the deployment, consider the following:
 
-- **Scaling**: If the application's load varies, consider implementing auto-scaling mechanisms to handle increased traffic automatically.
+- Using  Terraform Modules to break down and call various resources quite easily without having to code all the necessary details
 
-- **Content Delivery Networks (CDNs)**: Utilize CDNs to cache and serve static assets, reducing server load and latency.
-
-- **Load Balancing**: Implement load balancing to distribute traffic evenly across multiple servers or instances.
-
-- **Containerization**: Consider containerizing the application using technologies like Docker for easier deployment and scaling.
-
+- Use Docker Images to deploy application
 
 ## Diagram
