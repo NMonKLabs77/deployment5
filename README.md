@@ -67,10 +67,6 @@ Use Terraform to create:
    - Connect Github to pipeline(Username, PAT(Personal Access Token), Repository HTTP URL)
    - The JenkinsfileV1 runs the app setup.sh on the server
 
-10. **Edit Jenkins file**
-    -Add clean, and deploy stages   
-
-
 ## Optimization
 
 To optimize the deployment, consider the following:
