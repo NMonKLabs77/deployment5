@@ -1,11 +1,12 @@
 # Retail Banking App Deployment Using Terraform
 
-Date: 3/10/203
+Date: 17/10/2023
 
 Done by: Nehemiah Monrose
 
 ## Table of Contents
 - [Purpose](#purpose)
+- [Requirements](#requirements)
 - [Steps](#steps)
 - [Optimization](#optimization)
 - [Diagram](#diagram)
@@ -15,7 +16,17 @@ Done by: Nehemiah Monrose
 
 ## Purpose
 
-The purpose of this documentation is to guide you through the process I took to deploy my application to the NGINX Web server and monitor the performance of my application using Cloud Watch. Cloud Watch is an AWS service that allows me to monitor the performance of my application using various metrics.
+The purpose of this documentation is to demonstrate the process it took to deploy a Retail Banking App with Terraform which is an Infrastructure-As-Code provisioning tool used for building, changing, and versioning our infrastructure safely and efficiently, and Jenkins which is used to create, manage, and automate our CI/CD (Continous Integration/Continuous Deployment) pipeline.
+
+## Requirements
+Use Terraform to create:
+- 1 VPC
+- 2 Availability Zones
+- 2 Public Subnets
+- 2 EC2S
+- 1 Route Table
+- Security Group Ports: 8080, 8000, 22
+- Jenkins CI/CD pipeline
 
 
 ## Steps
@@ -43,106 +54,21 @@ The purpose of this documentation is to guide you through the process I took to 
      git clone [existing_repository_url]
      ```
 
-4. **Step #3 Setup VPC and EC2 Infrastructure** 
 
-   - Setup and Configure a new VPC
-
-   - Create a public subnet
-
-   - Connect to public Route Table
-
-   - Connect to Internet Gateway
+4. **Jenkins Setup on First Ec2 Instance**
+   - Installed Jenkins on my first EC2 Instance called tf_jenkins_server
+   - Created a new user account and password for Jenkins
+   - Generated SSH Key to be able to SSh into the second EC2 Instance retail_banking server
   
-5. **Initialize EC2 Instance**
-   - Navigate to https://us-east-1.console.aws.amazon.com
-   - In the search bar at the top, type EC2
-   - Click EC2 service
-   - Click Instances
-   - Click Launch Instances
-   - Name your Instance
-   - Select UBUNTU
-   - Click Instance Type and Select t2.medium
-   - Select Key pair
-   - Edit network settings
-   - Choose VPC
-   - For subnet choose VPC created
-   - Enable Auto-Assign IP
-   - Create a security group with ports 22, 80,8080 and 8000
-   - Click Launch Instance
-
-
-6. **Install and Configure Dependencies**
-   - Install "python3.10-venv", "python3-pip" and "zip"
-   - Install NGINX
-   - Edit the configuration file "/etc/nginx/sites-enabled/default"
-  <img width="606" alt="Screenshot 2023-10-03 at 11 35 39 AM" src="https://github.com/NMonKLabs77/deployment4/assets/139259756/d5d9830f-b85d-4818-9e07-f2cb4e6cc788">
-
-     
-
-7. **Install Jenkins**
-   - Update the server: ```sudo apt-get update```
-   - Add the key to our system: ``` curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | sudo tee \
-    /usr/share/keyrings/jenkins-keyring.asc > /dev/null```
-
-   - Add Jenkins apt repository entry: ```   
-  echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
-    https://pkg.jenkins.io/debian binary/ | sudo tee \
-    /etc/apt/sources.list.d/jenkins.list > /dev/null```
-
-  - Update server again: ```  sudo apt-get update```
-  - Install java: ```  sudo apt-get install fontconfig openjdk-17-jre```
-  - Install Jenkins:  ```sudo apt-get install jenkins```
-  - Start Jenkins server: ```sudo systemctl start jenkins```
-  - ```sudo cat /var/lib/jenkins/secrets/initialAdminPassword``` to get the Admin Password
-  - Install suggested plugins
-  - Install plugin Pipeline Utility Steps
-
 8. **Create and Configure the Jenkins pipeline
    - Click New Item in the left panel
    - Give a name to the pipeline
    - Select Multibranch pipeline
    - Connect Github to pipeline(Username, PAT(Personal Access Token), Repository HTTP URL)
+   - The JenkinsfileV1 runs the app setup.sh on the server
 
-9. **Configure Github Webhook**
-    - From the repository main page navigate to settings
-    - Click Webhooks
-    - Click Add webhook
-    - Click Payload Url Field and enter: "http://your_Jenkins_IP_Address:8080/github-webhook/"
-    - Click Add Webhook
-
-  <p>When any changes are made in a file, for example, the Jenkin File in the GitHub repository, the changes will automatically be pushed to Jenkin, and Jenkins will then run and test the stages again</p>
-  
 10. **Edit Jenkins file**
     -Add clean, and deploy stages   
-
- <img width="762" alt="Screenshot 2023-10-03 at 3 54 16 PM" src="https://github.com/NMonKLabs77/deployment4/assets/139259756/6b5daffd-3bcc-4cc4-92ee-52fc24b09755">
-
-
-11. **Monitoring**
-    - Navigate to Cloud Watch
-    - In the left panel click All Alarms
-    - Click Create Alarm
-    - Select Metric
-    - Select t2.medium: Cpu_usage_user
-    - Set name, alert message, topic threshold etc
-    - Stress test </br>
-
-
-
-    <img width="1181" alt="Screenshot 2023-10-03 at 10 47 26 PM" src="https://github.com/NMonKLabs77/deployment4/assets/139259756/5f4afeec-3d21-4975-b014-77259e0c71d8">
-
-    Here is a snapshot of the email sent:
-    
-
-<img width="1085" alt="Screenshot 2023-10-03 at 10 45 16 PM" src="https://github.com/NMonKLabs77/deployment4/assets/139259756/ca6edbfc-b06a-4a55-9b19-5ca6b2bb8d70">
-
-
-
-12. **Results of Deployment**
-    <p>URL Shortener was successfully deployed to Nginx Server!!</p>
-
-    <img width="1440" alt="Screenshot 2023-10-03 at 10 59 17 PM" src="https://github.com/NMonKLabs77/deployment4/assets/139259756/76c8bd06-7ab4-466a-9ee7-cb9d5c3b5fba">
-
 
 
 ## Optimization
